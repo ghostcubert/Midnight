@@ -8,9 +8,9 @@ on:
         required: true
         type: choice
         options:
-          - both
-          - ios
-          - android
+          - Both
+          - iOS
+          - Android
         default: both
 
 permissions:
@@ -19,7 +19,7 @@ permissions:
 jobs:
   ios:
     if: inputs.target == 'ios' || inputs.target == 'both'
-    runs-on: macos-14
+    runs-on: macos-15
     steps:
       - uses: actions/checkout@v4
 
