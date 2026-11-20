@@ -1,8 +1,8 @@
 "offset_list": { 
-    "This list was found by: Helix (@helix.67 on discord)"
+    "made_by": "This list was found by: Helix (@helix.67 on discord)"
 },
 
-"PR_offsets": {
+"PR_OFFSETS": {
     "++Fortnite+Release-18.40-CL-18167774": {
       "pr_addr": "0x95FB1C4",
       "geturl_addr": "0x70",
@@ -605,7 +605,7 @@
     }
 },
 
-"EOS_offsets": {
+"EOS_OFFSETS": {
     "++Fortnite+Release-22.00-CL-22031344": {
       "pr_addr": "0xDEC088",
       "geturl_addr": "0x178",
