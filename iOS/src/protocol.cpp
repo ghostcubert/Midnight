@@ -13,7 +13,7 @@ RequestFn request_method = nullptr;
 SetNavFn nav_method = nullptr;
 
 struct NavMethod {
-    Class class;
+    Class cls;
     NavFn method;
 };
 
@@ -25,8 +25,8 @@ const char *get_utf8(id string) {
 }
 
 std::string nsstring_to_std(id string) {
-    const char *get_utf8 = get_utf8(string);
-    return get_utf8 ? std::string(get_utf8) : std::string();
+    const char *value = get_utf8(string);
+    return value ? std::string(value) : std::string();
 }
 
 id std_to_nsstring(const char *value) {
@@ -79,7 +79,7 @@ void redirect_request(id self, SEL cmd, id request, id completion_handler) {
 
 NavMethod *find_hook(Class cls) {
     for (NavMethod &hook : nav_methods) {
-        if (hook.class == cls) return &hook;
+        if (hook.cls == cls) return &hook;
     }
     return nullptr;
 }
@@ -87,7 +87,7 @@ NavMethod *find_hook(Class cls) {
 void nav_policy(id self, SEL cmd, id web_view, id navigation_action, id decision_handler) {
     Class cls = (Class)((id (*)(id, SEL))objc_msgSend)(self, sel_registerName("class"));
     NavMethod *hook = find_hook(cls);
-    if (!hook || !hook->original) return;
+    if (!hook || !hook->method) return;
     NavFn original = hook->method;
 
     id request = navigation_action
