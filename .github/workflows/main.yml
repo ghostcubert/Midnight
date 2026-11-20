@@ -1,0 +1,74 @@
+name: Build Midnight
+
+on:
+  workflow_dispatch:
+    inputs:
+      target:
+        description: Which platform to build for?
+        required: true
+        type: choice
+        options:
+          - both
+          - ios
+          - android
+        default: both
+
+permissions:
+  contents: read
+
+jobs:
+  ios:
+    if: inputs.target == 'ios' || inputs.target == 'both'
+    runs-on: macos-14
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Build iOS dylibs
+        working-directory: iOS
+        run: |
+          set -euo pipefail
+          SDK="$(xcrun --sdk iphoneos --show-sdk-path)"
+          mkdir -p build/ios-arm64
+          xcrun --sdk iphoneos clang++ -x objective-c++ -std=c++17 -arch arm64 \
+            -isysroot "$SDK" -miphoneos-version-min=12.0 \
+            -fobjc-arc -fvisibility=hidden -dynamiclib \
+            -Iincludes main.cpp src/protocol.cpp \
+            -framework Foundation -o build/ios-arm64/libmidnight.dylib
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: midnight-ios
+          path: iOS/build/ios-arm64/libmidnight.dylib
+          if-no-files-found: error
+          retention-days: 14
+
+  android:
+    if: inputs.target == 'android' || inputs.target == 'both'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: android-actions/setup-android@v3
+        with:
+          packages: ''
+
+      - name: Install Android NDK
+        run: sdkmanager "ndk;27.2.12479018"
+
+      - name: Build Android library
+        working-directory: Android
+        run: |
+          set -euo pipefail
+          "$ANDROID_HOME/ndk/27.2.12479018/ndk-build" \
+            NDK_PROJECT_PATH=. \
+            APP_BUILD_SCRIPT=Android.mk \
+            NDK_APPLICATION_MK=Application.mk \
+            NDK_OUT=build/obj \
+            NDK_LIBS_OUT=build/libs
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: midnight-android-arm64
+          path: Android/build/libs/arm64-v8a/libmidnight.so
+          if-no-files-found: error
+          retention-days: 14
