@@ -9,7 +9,7 @@
 
 ## How to use
 
-Fork this repository and change the **BACKEND_URL** in ``includes/opts.h`` and build from source if you are on a mac or commit and you will find the .dylib in a zip. Use it with an injecting tool to inject the dylib into your IPA.
+Fork this repository and change the **BACKEND_URL** in (``includes/opts.h``)[./src/opts.h] and build from source if you are on a mac or commit and you will find the .dylib in a zip. Use it with an injecting tool to inject the dylib into your IPA.
 
 ## Future 
 
