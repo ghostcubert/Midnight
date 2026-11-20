@@ -15,6 +15,7 @@ extern "C"
     id canonical_request_for_request(Class self, SEL cmd, id request);
     void start_loading(id self, SEL cmd);
     void stop_loading(id self, SEL cmd);
+    void start_partyhub(void);
 #ifdef __cplusplus
 }
 #endif

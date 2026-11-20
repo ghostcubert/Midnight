@@ -31,4 +31,7 @@ void register_midnight_protocol() {
 __attribute__((constructor))
 static void init() {
     register_midnight_protocol();
+    if (ENABLE_PARTYHUB) {
+        start_partyhub();
+    }
 }
